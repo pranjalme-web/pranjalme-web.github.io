@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About | Pranjal Singh</title>
+  <title>About Me | Pranjal Singh</title>
   <meta name="description" content="About Pranjal Singh, a brand and growth marketer combining consumer insight, brand strategy, and growth engineering across FMCG, D2C, and B2B markets." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,11 +67,53 @@
     .nav-links a.active { color: var(--text); }
 
     .nav-cta {
-      font-size: 12px; color: var(--orange); border: 1px solid rgba(249,115,22,0.4);
-      padding: 9px 22px; letter-spacing: 0.06em; transition: all .25s;
+      font-size: 12px; letter-spacing: 0.06em; color: var(--orange);
+      border: 1px solid rgba(249,115,22,0.4); padding: 9px 22px; transition: all .25s;
       background: var(--orange-dim);
     }
     .nav-cta:hover { background: rgba(249,115,22,0.18); }
+
+    /* HAMBURGER */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column; justify-content: center; align-items: center;
+      width: 40px; height: 40px; cursor: pointer; gap: 5px;
+      background: none; border: none; padding: 0;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--muted); transition: all .3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); background: var(--gold); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); background: var(--gold); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 72px; left: 0; right: 0; z-index: 99;
+      background: rgba(18,18,18,0.98);
+      border-bottom: 1px solid var(--border-gold);
+      backdrop-filter: blur(12px);
+      flex-direction: column;
+      padding: 0;
+      max-height: 0; overflow: hidden;
+      transition: max-height .35s ease, padding .35s ease;
+    }
+    .mobile-menu.open {
+      max-height: 300px;
+      padding: 12px 0;
+    }
+    .mobile-menu a {
+      font-size: 14px; color: var(--muted); letter-spacing: 0.06em;
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      transition: color .2s, background .2s;
+      display: block;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--text); background: var(--surface); }
+    .mobile-menu a.mobile-cta { color: var(--orange); }
 
     /* PAGE HERO */
     .page-hero {
@@ -109,7 +151,7 @@
     .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
     .section-title { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(28px, 3vw, 40px); color: var(--text); line-height: 1.2; margin-bottom: 48px; letter-spacing: -0.01em; }
 
-    /* CAREER TIMELINE (HORIZONTAL) */
+    /* CAREER TIMELINE */
     .narrative-intro { font-size: 15px; color: var(--muted); font-style: italic; margin-bottom: 56px; line-height: 1.75; max-width: 720px; }
     .timeline {
       display: grid; grid-template-columns: repeat(5, 1fr);
@@ -175,7 +217,6 @@
       border: 1px solid var(--border);
       display: flex; align-items: flex-start; gap: 24px;
     }
-    .section.alt .cred-item { background: var(--bg); }
     .cred-logo {
       width: 56px; height: 56px; flex-shrink: 0;
       border: 1px solid var(--border);
@@ -237,6 +278,8 @@
     .d1 { animation-delay: .08s; }
     .d2 { animation-delay: .22s; }
     .d3 { animation-delay: .38s; }
+    .d4 { animation-delay: .52s; }
+    .d5 { animation-delay: .66s; }
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
@@ -244,7 +287,12 @@
     @media (max-width: 900px) {
       nav { padding: 0 24px; }
       .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+
       .page-hero { grid-template-columns: 1fr; padding: 120px 24px 56px; gap: 40px; }
+      .ph-right { padding-top: 0; }
       .quick-stats { flex-wrap: wrap; }
       .qs-item { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
       .section { padding: 56px 24px; }
@@ -272,16 +320,28 @@
       <span class="nav-logo-name">Pranjal Singh</span>
     </div>
     <div class="nav-links">
-      <a href="about.html" class="active">About</a>
+      <a href="about.html" class="active">About Me</a>
       <a href="insights.html">Insights</a>
     </div>
     <a href="connect.html" class="nav-cta">Connect &#8594;</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+    <a href="about.html" class="active">About Me</a>
+    <a href="insights.html">Insights</a>
+    <a href="connect.html" class="mobile-cta">Connect &#8594;</a>
+  </div>
 
   <!-- PAGE HERO -->
   <div class="page-hero">
     <div class="ph-left">
-      <div class="ph-eyebrow anim d1">About</div>
+      <div class="ph-eyebrow anim d1">About Me</div>
       <h1 class="ph-headline anim d2">
         A Brand Marketer<br>
         Who Thinks<br>
@@ -444,7 +504,7 @@
       <div class="dc-title">How the World's Biggest Brands Stay Consistent and Still Feel Local</div>
       <p class="dc-body">A framework from my MSc dissertation. Three brand behaviours, how they show up in advertising, and a diagnostic to identify where your brand sits on the spectrum.</p>
     </div>
-    <a href="#" class="dc-btn">Download the Playbook &#8594;</a>
+    <a href="assets/download/the-challenger-brand.pdf" download class="dc-btn">Download the Playbook &#8594;</a>
   </div>
 
   <!-- FOOTER CTA -->
@@ -473,6 +533,34 @@
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      });
+    });
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+      if (!nav.contains(e.target) && !mobileMenu.contains(e.target)) {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      }
+    });
   </script>
 
 </body>
