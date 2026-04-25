@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Diagnose a Leaking D2C Funnel | Insights | Pranjal Singh</title>
+  <meta name="description" content="A structured GA4 audit framework for diagnosing D2C funnel leaks, built from real conversion work. No data science team required." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #121212;
+      --surface:      #1A1A1A;
+      --text:         #E5E7EB;
+      --muted:        #9CA3AF;
+      --dim:          #687280;
+      --gold:         #D4AF37;
+      --orange:       #F97316;
+      --gold-dim:     rgba(212,175,55,0.10);
+      --orange-dim:   rgba(249,115,22,0.10);
+      --border:       rgba(255,255,255,0.06);
+      --border-gold:  rgba(212,175,55,0.3);
+      --ff-sans:      'Manrope', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--ff-sans); font-size: 16px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 72px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px;
+      background: rgba(18,18,18,0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      transition: border-color .3s;
+    }
+    nav.scrolled { border-bottom-color: rgba(212,175,55,0.12); }
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-logo-mark { font-weight: 700; font-size: 20px; color: var(--gold); }
+    .nav-logo-name { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 40px; }
+    .nav-links a {
+      font-size: 13px; color: var(--muted); letter-spacing: 0.05em;
+      transition: color .2s; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left; transition: transform .25s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--text); }
+    .nav-cta {
+      font-size: 12px; letter-spacing: 0.06em; color: var(--orange);
+      border: 1px solid rgba(249,115,22,0.4); padding: 9px 22px; transition: all .25s;
+      background: var(--orange-dim);
+    }
+    .nav-cta:hover { background: rgba(249,115,22,0.18); }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--muted); transition: all .25s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed; top: 72px; left: 0; right: 0;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 24px; flex-direction: column; gap: 18px; z-index: 99;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 14px; color: var(--muted); letter-spacing: 0.05em; padding: 6px 0; }
+    .mobile-menu a.active, .mobile-menu a:hover { color: var(--text); }
+    .mobile-menu .mob-cta {
+      margin-top: 8px; color: var(--orange); border: 1px solid rgba(249,115,22,0.4);
+      padding: 11px 20px; text-align: center; font-size: 13px; letter-spacing: 0.05em;
+      background: var(--orange-dim);
+    }
+
+    .breadcrumb {
+      padding-top: 96px; padding-bottom: 0;
+      padding-left: 56px; padding-right: 56px;
+    }
+    .breadcrumb a {
+      font-size: 12px; letter-spacing: 0.08em; color: var(--dim);
+      text-transform: uppercase; transition: color .2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .breadcrumb a:hover { color: var(--muted); }
+    .breadcrumb a::before { content: '←'; font-size: 14px; }
+
+    .post-hero {
+      padding: 48px 56px 56px;
+      max-width: 860px;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-pill-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .post-pill {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 5px 12px; border: 1px solid var(--border-gold); color: var(--gold);
+    }
+    .post-pill.orange { border-color: rgba(249,115,22,0.3); color: var(--orange); }
+    .post-date { font-size: 12px; color: var(--dim); letter-spacing: 0.06em; }
+
+    .post-title {
+      font-weight: 700; font-size: clamp(32px, 4.5vw, 54px);
+      line-height: 1.08; letter-spacing: -0.02em; color: var(--text);
+      margin-bottom: 22px;
+    }
+    .post-title em { color: var(--orange); font-style: normal; }
+
+    .post-lede {
+      font-size: 17px; color: var(--muted); line-height: 1.75;
+      max-width: 640px; margin-bottom: 32px; font-weight: 400;
+    }
+
+    .post-reading-meta {
+      display: flex; align-items: center; gap: 20px;
+      font-size: 12px; color: var(--dim); letter-spacing: 0.04em;
+    }
+    .post-reading-meta span { display: flex; align-items: center; gap: 6px; }
+
+    #progress-bar {
+      position: fixed; top: 72px; left: 0; right: 0; height: 2px;
+      background: var(--border); z-index: 99;
+    }
+    #progress-fill {
+      height: 100%; background: var(--gold); width: 0%;
+      transition: width .1s linear;
+    }
+
+    .post-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 0;
+      align-items: start;
+      max-width: 1120px;
+    }
+
+    .post-body {
+      padding: 64px 56px 80px;
+      border-left: 1px solid var(--border);
+    }
+
+    .post-body h2 {
+      font-weight: 700; font-size: clamp(20px, 2.2vw, 26px);
+      color: var(--text); line-height: 1.25;
+      margin-top: 60px; margin-bottom: 18px;
+    }
+    .post-body h3 {
+      font-weight: 600; font-size: 17px; color: var(--text);
+      margin-top: 40px; margin-bottom: 14px;
+    }
+    .post-body p {
+      font-size: 15px; color: var(--muted); line-height: 1.9;
+      margin-bottom: 22px;
+    }
+    .post-body p:last-child { margin-bottom: 0; }
+    .post-body strong { color: var(--text); font-weight: 600; }
+    .post-body em { color: var(--muted); font-style: italic; }
+
+    .metric-tag {
+      display: inline-block;
+      background: var(--orange-dim); border: 1px solid rgba(249,115,22,0.2);
+      padding: 1px 8px; color: var(--orange); font-weight: 600;
+    }
+    .metric-tag.gold-tag {
+      background: var(--gold-dim); border-color: rgba(212,175,55,0.2); color: var(--gold);
+    }
+
+    .pullquote {
+      border-left: 2px solid var(--gold); padding: 20px 28px;
+      margin: 40px 0; background: var(--gold-dim);
+    }
+    .pullquote p {
+      font-size: 18px; color: var(--text); line-height: 1.65;
+      font-weight: 600; margin-bottom: 0;
+    }
+
+    .insight-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      padding: 28px 32px; margin: 36px 0;
+    }
+    .insight-box-label {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .insight-box p {
+      font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0;
+    }
+    .insight-box strong { color: var(--text); }
+
+    .post-table {
+      width: 100%; border-collapse: collapse; margin: 36px 0;
+    }
+    .post-table th {
+      text-align: left; font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--dim);
+      padding: 10px 16px; border-bottom: 1px solid var(--border);
+    }
+    .post-table td {
+      font-size: 14px; color: var(--muted); padding: 14px 16px;
+      border-bottom: 1px solid var(--border); vertical-align: top;
+      line-height: 1.65;
+    }
+    .post-table td:first-child { color: var(--text); font-weight: 500; }
+    .post-table tr:last-child td { border-bottom: none; }
+
+    .framework-steps { margin: 36px 0; display: flex; flex-direction: column; gap: 0; }
+    .fw-step {
+      display: grid; grid-template-columns: 48px 1fr;
+      gap: 20px; padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .fw-step:last-child { border-bottom: none; }
+    .fw-num {
+      font-weight: 700; font-size: 28px; color: var(--gold);
+      line-height: 1; opacity: 0.5; padding-top: 2px;
+    }
+    .fw-content h4 { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 8px; }
+    .fw-content p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0; }
+
+    .post-divider {
+      width: 40px; height: 1px; background: var(--gold);
+      margin: 48px 0; opacity: 0.4;
+    }
+
+    .post-sidebar {
+      padding: 64px 36px;
+      position: sticky; top: 72px;
+    }
+
+    .toc-label {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--dim);
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list li a {
+      font-size: 12px; color: var(--dim); line-height: 1.5;
+      padding: 6px 0; display: block; transition: color .2s;
+      border-left: 2px solid transparent; padding-left: 12px;
+    }
+    .toc-list li a:hover { color: var(--muted); border-left-color: var(--border-gold); }
+    .toc-list li a.active { color: var(--text); border-left-color: var(--gold); }
+
+    .sidebar-section { margin-top: 48px; }
+    .sidebar-section-label {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--dim);
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .sidebar-post {
+      padding: 16px 0; border-bottom: 1px solid var(--border);
+    }
+    .sidebar-post:last-child { border-bottom: none; }
+    .sidebar-post-tag { font-size: 10px; letter-spacing: 0.16em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+    .sidebar-post a { font-size: 13px; color: var(--muted); line-height: 1.5; transition: color .2s; }
+    .sidebar-post a:hover { color: var(--text); }
+
+    .footer-cta {
+      padding: 80px 56px; text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .fc-headline {
+      font-weight: 700; font-size: clamp(24px, 3vw, 38px);
+      color: var(--text); margin-bottom: 16px;
+    }
+    .fc-body { font-size: 15px; color: var(--muted); max-width: 440px; margin: 0 auto 32px; line-height: 1.75; }
+    .fc-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: var(--orange);
+      border: 1px solid var(--orange); padding: 13px 30px;
+      letter-spacing: 0.05em; transition: all .25s;
+    }
+    .fc-btn:hover { background: var(--orange); color: var(--bg); }
+
+    footer {
+      padding: 24px 56px; background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy    { font-size: 11px; color: var(--dim); }
+    .footer-tagline { font-size: 11px; color: var(--dim); font-style: italic; }
+    .footer-li      { font-size: 11px; color: var(--gold); transition: opacity .2s; }
+    .footer-li:hover { opacity: .7; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    .anim { animation: fadeUp .75s ease both; }
+    .d1 { animation-delay: .08s; }
+    .d2 { animation-delay: .22s; }
+    .d3 { animation-delay: .36s; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .breadcrumb { padding: 96px 24px 0; }
+      .post-hero { padding: 40px 24px 48px; }
+      .post-layout { grid-template-columns: 1fr; }
+      .post-body { padding: 48px 24px 64px; border-left: none; }
+      .post-sidebar { display: none; }
+      .footer-cta { padding: 56px 24px; }
+      footer { flex-direction: column; gap: 10px; text-align: center; padding: 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"><div id="progress-fill"></div></div>
+
+  <nav id="nav">
+    <div class="nav-logo">
+      <a href="index.html" class="nav-logo-mark">PS</a>
+      <span class="nav-logo-name">Pranjal Singh</span>
+    </div>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="insights.html" class="active">Insights</a>
+    </div>
+    <a href="connect.html" class="nav-cta" aria-label="Connect with Pranjal">Connect &#8594;</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+    <a href="about.html">About</a>
+    <a href="insights.html" class="active">Insights</a>
+    <a href="connect.html" class="mob-cta">Connect &#8594;</a>
+  </div>
+
+  <div class="breadcrumb anim d1">
+    <a href="insights.html">All Insights</a>
+  </div>
+
+  <header class="post-hero">
+    <div class="post-pill-row anim d1">
+      <span class="post-pill">Framework</span>
+      <span class="post-date">March 2026</span>
+    </div>
+    <h1 class="post-title anim d2">
+      How to Diagnose a <em>Leaking D2C Funnel</em> Without a Dedicated Data Team
+    </h1>
+    <p class="post-lede anim d3">
+      Most D2C brands respond to a conversion problem by increasing ad spend. If the funnel is leaking, that logic gets expensive fast. Here is the exact GA4 audit framework that recovered 28 percentage points of lost conversion.
+    </p>
+    <div class="post-reading-meta anim d3">
+      <span>&#128337; 5 min read</span>
+      <span>&middot;</span>
+      <span>For: D2C Growth Marketers &middot; Founders</span>
+    </div>
+  </header>
+
+  <div class="post-layout">
+
+    <aside class="post-sidebar">
+      <div class="toc-label">In this post</div>
+      <ul class="toc-list" id="toc">
+        <li><a href="#section-1">What a funnel audit actually means</a></li>
+        <li><a href="#section-2">Confirm your GA4 setup</a></li>
+        <li><a href="#section-3">Set a benchmark first</a></li>
+        <li><a href="#section-4">Build the funnel exploration</a></li>
+        <li><a href="#section-5">Segment by device</a></li>
+        <li><a href="#section-6">Layer in qualitative data</a></li>
+      </ul>
+
+    </aside>
+
+    <article class="post-body">
+
+      <p>
+        More traffic in, more revenue out. The logic seems sound until you run it against a funnel that is losing people at the cart stage, or worse, at checkout. At that point you are not scaling a revenue engine. You are scaling a draining bucket.
+      </p>
+
+      <p>
+        A <span class="metric-tag">28%</span> improvement in conversion rate at a D2C brand I worked with did not come from more budget or a new creative direction. It came from a structured audit. GA4 access, a clear framework, and roughly a week of focused diagnostic work.
+      </p>
+
+      <h2 id="section-1">What a Funnel Audit Actually Means</h2>
+
+      <p>
+        A D2C funnel audit is not a report. It is a structured process of isolating where buyer intent collapses and why. The goal is not to find every inefficiency simultaneously. Find the single biggest leak, fix it, and move to the next.
+      </p>
+
+      <p>
+        The framework works across most e-commerce setups and requires no SQL, no custom data infrastructure, and no analyst headcount. What it does require is clean event tracking in GA4.
+      </p>
+
+      <div class="insight-box reveal">
+        <div class="insight-box-label">The Upstream Problem</div>
+        <p>
+          Conversion problems are rarely uniform. They tend to cluster at one specific stage, on one specific device, triggered by one specific friction point. Broad fixes rarely address them. Diagnosis does.
+        </p>
+      </div>
+
+      <h2 id="section-2">Step 1: Confirm Your GA4 Setup Is Actually Tracking</h2>
+
+      <p>
+        This sounds basic. It is also where most audits stall. Your GA4 property needs to be logging these standard e-commerce events with reliable consistency: <strong>view_item, add_to_cart, view_cart, begin_checkout, purchase</strong>. If these events are missing or misfiring, nothing downstream is trustworthy. For Shopify and WooCommerce, this is typically a toggle or a plugin setting. Fix the tracking first.
+      </p>
+
+      <h2 id="section-3">Step 2: Set a Benchmark Before You Look for a Problem</h2>
+
+      <p>
+        The instinct is to open the funnel report and immediately look for the lowest number. The more useful approach is knowing what a healthy funnel looks like before you interpret the data.
+      </p>
+
+      <table class="post-table">
+        <thead>
+          <tr>
+            <th>Funnel Stage</th>
+            <th>Industry Average</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Session to Product View</td><td>40 to 50%</td></tr>
+          <tr><td>Product View to Add to Cart</td><td>8 to 10%</td></tr>
+          <tr><td>Add to Cart to Checkout</td><td>40 to 50%</td></tr>
+          <tr><td>Checkout to Purchase</td><td>40 to 50%</td></tr>
+          <tr><td>Overall Site Conversion Rate</td><td>~1.5 to 2%</td></tr>
+          <tr><td>Cart Abandonment Rate</td><td>~70%</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        These are averages, not targets. Your baseline may differ by category, price point, or traffic source. A 15% Add to Cart to Checkout rate, when the norm sits at 40 to 50%, is a signal that something specific is wrong at the cart stage. That is what calibration does.
+      </p>
+
+      <h2 id="section-4">Step 3: Build the Funnel Exploration in GA4</h2>
+
+      <p>
+        Navigate to the Explore tab in GA4. Select Funnel Exploration. Set your five steps using the standard e-commerce events above. Do not use the default overview reports for this. They aggregate too broadly and obscure the step-by-step drop-off rates that actually matter here.
+      </p>
+
+      <p>
+        Once the funnel is visible, identify the step with the steepest deviation from your benchmark. That is your primary choke point. Everything else is secondary until that stage is resolved.
+      </p>
+
+      <h2 id="section-5">Step 4: Segment by Device and Browser</h2>
+
+      <p>
+        A funnel leak is rarely universal. When you have found the choke point, apply breakdowns by Device Category and Browser within your Funnel Exploration.
+      </p>
+
+      <div class="pullquote reveal">
+        <p>
+          "If checkout-to-purchase completion is 48% on desktop and 11% on mobile, you do not have a pricing issue. You have a mobile UX failure."
+        </p>
+      </div>
+
+      <p>
+        An unclickable button, a keyboard that covers a form field, a slow-loading payment script. These are specific, fixable, and often completely invisible to anyone who only tests on a desktop. Mobile commerce accounts for over 60% of total global e-commerce sales (Statista, 2024). A mobile-specific conversion failure is not a secondary problem. It is the problem.
+      </p>
+
+      <h2 id="section-6">Step 5: Layer In Qualitative Data</h2>
+
+      <p>
+        GA4 tells you where the leak is and what device is affected. It does not tell you why the user left. Once you have isolated the exact page and device causing the drop-off, open a session recording tool such as Microsoft Clarity or Hotjar. Filter specifically for users who reached the problem stage but did not proceed.
+      </p>
+
+      <p>
+        Watch for rage clicks. Repeated hesitation on a single element. Users opening and closing a shipping cost calculator or repeatedly attempting a promo code that does not apply. The moment frustration overrides intent is usually visible within the first few recordings. An "estimated taxes calculated at checkout" message appearing after a user had already committed psychologically. A broken quantity selector on mobile. These are not abstract UX problems. They are revenue line items.
+      </p>
+
+      <div class="post-divider"></div>
+
+      <p>
+        A structured funnel audit typically delivers faster ROI than any acquisition campaign running against a leaking funnel. Fixing a mobile checkout failure that recovers even 10 percentage points of lost completions is worth more, at lower cost, than increasing top-of-funnel traffic by 20%.
+      </p>
+
+      <p>
+        The default move when revenue stalls is to spend more. The upstream question, the one that tends to pay off, is: where is the money already coming in and then leaving? Fix the bucket. Then turn up the tap.
+      </p>
+
+    </article>
+
+  </div>
+
+  <div class="footer-cta reveal">
+    <div class="fc-headline">If this thinking is relevant to your work</div>
+    <p class="fc-body">I'm open to conversations about brand strategy, GTM architecture, or growth systems. No agenda required.</p>
+    <a href="connect.html" class="fc-btn">Connect &#8594;</a>
+  </div>
+
+  <footer>
+    <span class="footer-copy">&copy; 2026 Pranjal Singh</span>
+    <span class="footer-tagline">Brand-led. Growth-focused.</span>
+    <div style="display:flex;gap:24px;">
+      <a href="https://linkedin.com" class="footer-li" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const btn = document.getElementById('hamburger');
+    const menu = document.getElementById('mobile-menu');
+    btn.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open);
+    });
+
+    const fill = document.getElementById('progress-fill');
+    const body = document.querySelector('.post-body');
+    window.addEventListener('scroll', () => {
+      const rect = body.getBoundingClientRect();
+      const total = body.offsetHeight + rect.top - window.innerHeight;
+      const progress = Math.min(Math.max(-rect.top / total, 0), 1);
+      fill.style.width = (progress * 100) + '%';
+    });
+
+    const sections = document.querySelectorAll('.post-body h2[id]');
+    const tocObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const link = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+        if (link) link.classList.toggle('active', entry.isIntersecting);
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(s => tocObserver.observe(s));
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

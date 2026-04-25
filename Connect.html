@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect | Pranjal Singh</title>
+  <meta name="description" content="Work with Pranjal Singh, a brand and growth marketer helping founders and marketing teams build growth systems, content strategy, and go-to-market execution." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #121212;
+      --surface:      #1A1A1A;
+      --surface2:     #1A1A1A;
+      --text:         #E5E7EB;
+      --muted:        #9CA3AF;
+      --dim:          #687280;
+      --gold:         #D4AF37;
+      --orange:       #F97316;
+      --gold-dim:     rgba(212,175,55,0.10);
+      --orange-dim:   rgba(249,115,22,0.10);
+      --border:       rgba(255,255,255,0.06);
+      --border-gold:  rgba(212,175,55,0.3);
+      --ff-sans:      'Manrope', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--ff-sans); font-size: 16px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 72px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px;
+      background: rgba(18,18,18,0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      transition: border-color .3s;
+    }
+    nav.scrolled { border-bottom-color: rgba(212,175,55,0.12); }
+
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-logo-mark { font-family: var(--ff-sans); font-weight: 700; font-size: 20px; color: var(--gold); }
+    .nav-logo-name { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    .nav-links { display: flex; align-items: center; gap: 40px; }
+    .nav-links a {
+      font-size: 13px; color: var(--muted); letter-spacing: 0.05em;
+      transition: color .2s; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left; transition: transform .25s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--text); }
+
+    .nav-cta {
+      font-size: 12px; color: var(--orange); border: 1px solid rgba(249,115,22,0.4);
+      padding: 9px 22px; letter-spacing: 0.06em; transition: all .25s;
+      background: var(--orange-dim);
+    }
+    .nav-cta:hover, .nav-cta.active { background: rgba(249,115,22,0.18); }
+
+    /* PAGE HERO */
+    .page-hero {
+      margin-top: 72px;
+      padding: 76px 56px 96px;
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .ph-eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .ph-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .ph-headline {
+      font-family: var(--ff-sans); font-weight: 700;
+      font-size: clamp(44px, 5vw, 72px);
+      line-height: 1.05; color: var(--text); letter-spacing: -0.02em;
+    }
+    .ph-headline em { color: var(--orange); font-style: normal; }
+    .ph-right { padding-top: 35px; }
+    .ph-body { font-size: 16px; line-height: 1.8; color: var(--muted); margin-bottom: 24px; }
+    .ph-body strong { color: var(--text); font-weight: 600; }
+    .ph-caveat {
+      font-size: 14px; color: var(--dim); line-height: 1.7;
+      padding: 16px 20px; border-left: 2px solid var(--dim);
+      font-style: italic;
+    }
+
+    /* ENGAGEMENT TYPES */
+    .engagement-section { padding: 88px 56px; background: var(--surface); }
+    .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+    .section-title { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(28px, 3vw, 40px); color: var(--text); margin-bottom: 56px; line-height: 1.2; letter-spacing: -0.01em; }
+    .engagement-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .eng-card {
+      background: var(--bg); padding: 44px 36px;
+      border: 1px solid var(--border);
+      transition: border-color .3s;
+    }
+    .eng-card:hover { border-color: var(--border-gold); }
+    .eng-num { font-family: var(--ff-sans); font-weight: 700; font-size: 40px; color: var(--gold); display: block; margin-bottom: 24px; opacity: 0.5; }
+    .eng-title { font-size: 20px; color: var(--text); font-weight: 600; margin-bottom: 14px; }
+    .eng-body { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
+    .eng-signals { display: flex; flex-direction: column; gap: 8px; }
+    .eng-signal {
+      font-size: 12px; color: var(--dim);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .eng-signal::before {
+      content: ''; display: block; flex-shrink: 0;
+      width: 12px; height: 1px; background: var(--gold); margin-top: 9px;
+    }
+
+    /* GOOD FIT / NOT A FIT */
+    .fit-section { padding: 72px 56px; border-bottom: 1px solid var(--border); }
+    .fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 40px; }
+    .fit-col { padding: 40px; border: 1px solid var(--border); }
+    .fit-col.yes { border-top: 2px solid var(--gold); }
+    .fit-col.no  { border-top: 2px solid var(--dim); }
+    .fit-heading { font-size: 14px; font-weight: 600; margin-bottom: 24px; }
+    .fit-col.yes .fit-heading { color: var(--gold); }
+    .fit-col.no  .fit-heading { color: var(--dim); }
+    .fit-list { display: flex; flex-direction: column; gap: 14px; }
+    .fit-item {
+      font-size: 14px; color: var(--muted); line-height: 1.6;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .fit-item::before { content: ''; flex-shrink: 0; margin-top: 9px; }
+    .fit-col.yes .fit-item::before { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+    .fit-col.no  .fit-item::before { width: 6px; height: 2px; background: var(--dim); margin-top: 10px; }
+
+    /* CONTACT DETAILS */
+    .contact-section {
+      padding: 88px 56px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .cl-label { font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+    .cl-title { font-family: var(--ff-sans); font-weight: 700; font-size: 32px; color: var(--text); margin-bottom: 20px; line-height: 1.25; letter-spacing: -0.01em; }
+    .cl-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 40px; }
+    .contact-items { display: flex; flex-direction: column; gap: 24px; }
+    .contact-item {
+      display: flex; align-items: center; gap: 20px;
+      padding: 24px 28px; border: 1px solid var(--border);
+      background: var(--surface); transition: border-color .25s;
+    }
+    .contact-item:hover { border-color: var(--border-gold); }
+    .ci-icon { font-family: var(--ff-sans); font-weight: 600; font-size: 14px; color: var(--gold); flex-shrink: 0; width: 40px; }
+    .ci-label { font-size: 11px; letter-spacing: 0.12em; color: var(--dim); text-transform: uppercase; margin-bottom: 4px; }
+    .ci-value { font-size: 16px; color: var(--text); font-weight: 500; }
+
+    /* PROCESS STEPS */
+    .cr-label { font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+    .cr-title { font-family: var(--ff-sans); font-weight: 700; font-size: 24px; color: var(--text); margin-bottom: 20px; line-height: 1.3; letter-spacing: -0.01em; }
+    .process-steps { display: flex; flex-direction: column; gap: 0; }
+    .ps-item {
+      display: flex; gap: 20px; padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .ps-item:last-child { border-bottom: none; }
+    .ps-step { font-family: var(--ff-sans); font-weight: 600; font-size: 13px; color: var(--gold); flex-shrink: 0; width: 28px; }
+    .ps-title { font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 4px; }
+    .ps-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* CLOSING STATEMENT */
+    .closing-statement {
+      padding: 80px 56px; background: var(--surface);
+      border-top: 1px solid var(--border); text-align: center;
+    }
+    .cs-quote {
+      font-family: var(--ff-sans); font-weight: 600;
+      font-size: clamp(20px, 2.5vw, 30px);
+      color: var(--text); line-height: 1.5; max-width: 680px; margin: 0 auto;
+      letter-spacing: -0.01em;
+    }
+    .cs-quote em { color: var(--orange); font-style: normal; }
+
+    /* FOOTER CTA */
+    .footer-cta {
+      padding: 80px 56px; text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .fc-headline { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(28px, 3vw, 40px); color: var(--text); margin-bottom: 18px; letter-spacing: -0.01em; }
+    .fc-body { font-size: 15px; color: var(--muted); max-width: 460px; margin: 0 auto 36px; line-height: 1.75; }
+    .fc-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange);
+      padding: 14px 32px; letter-spacing: 0.05em; transition: all .25s;
+    }
+    .fc-btn:hover { background: var(--orange); color: var(--bg); }
+
+    /* FOOTER */
+    footer {
+      padding: 24px 56px; background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy    { font-size: 11px; color: var(--dim); }
+    .footer-tagline { font-size: 11px; color: var(--dim); font-style: italic; }
+    .footer-li      { font-size: 11px; color: var(--gold); transition: opacity .2s; }
+    .footer-li:hover { opacity: .7; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    .anim { animation: fadeUp .75s ease both; }
+    .d1 { animation-delay: .08s; }
+    .d2 { animation-delay: .22s; }
+    .d3 { animation-delay: .38s; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .page-hero { grid-template-columns: 1fr; padding: 48px 24px 64px; gap: 40px; }
+      .ph-right { padding-top: 0; }
+      .engagement-section { padding: 56px 24px; }
+      .engagement-grid { grid-template-columns: 1fr; }
+      .fit-section { padding: 56px 24px; }
+      .fit-grid { grid-template-columns: 1fr; }
+      .contact-section { grid-template-columns: 1fr; padding: 56px 24px; gap: 48px; }
+      .closing-statement { padding: 56px 24px; }
+      .footer-cta { padding: 60px 24px; }
+      footer { padding: 20px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-logo">
+      <a href="index.html" class="nav-logo-mark">PS</a>
+      <span class="nav-logo-name">Pranjal Singh</span>
+    </div>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="insights.html">Insights</a>
+    </div>
+    <a href="connect.html" class="nav-cta active">Connect &#8594;</a>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div>
+      <div class="ph-eyebrow anim d1">Connect</div>
+      <h1 class="ph-headline anim d2">
+        Selective.<br>
+        Specific.<br>
+        <em>Available.</em>
+      </h1>
+    </div>
+    <div class="ph-right anim d3">
+      <p class="ph-body">I work with growth-focused founders and marketing teams on challenges where commercial precision matters. Brand strategy, performance systems, content architecture and go-to-market execution. I bring the full stack.</p>
+      <p class="ph-body">If you are building a growth system, developing a content engine, launching into a new category, or diagnosing a funnel that is not converting, let's talk.</p>
+      <div class="ph-caveat">
+        If you are looking for someone to execute an existing playbook without strategic input, I am probably not the right fit.
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGEMENT TYPES -->
+  <section class="engagement-section">
+    <div class="section-label reveal">What I Work On</div>
+    <h2 class="section-title reveal">How I Work</h2>
+    <div class="engagement-grid reveal">
+
+      <div class="eng-card">
+        <span class="eng-num">01</span>
+        <div class="eng-title">Full-Time Roles</div>
+        <p class="eng-body">Brand and growth positions at companies and challenger consumer brands where commercial thinking and execution go hand in hand. I bring a complete marketing infrastructure mindset, from consumer insight to P&amp;L accountability.</p>
+        <div class="eng-signals">
+          <div class="eng-signal">Head of Marketing / Brand Director level</div>
+          <div class="eng-signal">FMCG, D2C, or AI-native product companies</div>
+          <div class="eng-signal">Challenger brands with real commercial ambition</div>
+          <div class="eng-signal">Teams that value strategic thinking alongside execution</div>
+        </div>
+      </div>
+
+      <div class="eng-card">
+        <span class="eng-num">02</span>
+        <div class="eng-title">Fractional / Advisory</div>
+        <p class="eng-body">Strategic advisory for founders and marketing teams who need an experienced marketing perspective without the overhead of a full-time hire.</p>
+        <div class="eng-signals">
+          <div class="eng-signal">GTM strategy and launch architecture</div>
+          <div class="eng-signal">Brand positioning and messaging framework</div>
+          <div class="eng-signal">Funnel diagnosis and growth system design</div>
+          <div class="eng-signal">Fundraising narrative support</div>
+        </div>
+      </div>
+
+      <div class="eng-card">
+        <span class="eng-num">03</span>
+        <div class="eng-title">Specific Projects</div>
+        <p class="eng-body">Defined-scope engagements with clear deliverables and measurable outcomes. Project-based, outcome-oriented, with a built-in handoff.</p>
+        <div class="eng-signals">
+          <div class="eng-signal">Product launch strategy and execution</div>
+          <div class="eng-signal">Funnel rebuild and conversion architecture</div>
+          <div class="eng-signal">Marketing automation design</div>
+          <div class="eng-signal">Consumer research to NPD brief</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GOOD FIT / NOT A FIT -->
+  <section class="fit-section">
+    <div class="section-label reveal">Honest Assessment</div>
+    <h2 class="section-title reveal">Who I Work Best With</h2>
+    <div class="fit-grid reveal">
+      <div class="fit-col yes">
+        <div class="fit-heading">Good fit</div>
+        <div class="fit-list">
+          <div class="fit-item">Founders or marketing leads with a clear commercial challenge and the openness to think differently</div>
+          <div class="fit-item">Teams entering a new category or market where execution quality makes a real difference</div>
+          <div class="fit-item">Brands that need both brand building and performance marketing working together</div>
+          <div class="fit-item">Organisations looking to build lasting marketing systems, not just run one-off campaigns</div>
+          <div class="fit-item">Leaders who judge marketing by revenue and profit, not likes and impressions</div>
+        </div>
+      </div>
+      <div class="fit-col no">
+        <div class="fit-heading">Probably not a fit</div>
+        <div class="fit-list">
+          <div class="fit-item">Organisations looking for someone to follow a set brief without strategic input</div>
+          <div class="fit-item">Brands where marketing has no direct link to commercial outcomes</div>
+          <div class="fit-item">Teams where brand and performance budgets are completely separate with no room for integration</div>
+          <div class="fit-item">Projects with no clear goal or way to measure success</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT DETAILS -->
+  <div class="contact-section">
+    <div class="contact-left reveal">
+      <div class="cl-label">Get in Touch</div>
+      <div class="cl-title">Start the Conversation</div>
+      <p class="cl-body">Brand and growth marketer based in India and the United Kingdom. Working with founders and teams on GTM strategy, brand positioning, performance marketing, content architecture, and lifecycle automation.</p>
+      <div class="contact-items">
+        <a href="mailto:pranjal1731@gmail.com" class="contact-item">
+          <span class="ci-icon">@</span>
+          <div class="ci-content">
+            <div class="ci-label">Email</div>
+            <div class="ci-value">pranjal1731@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/pranjalps/" target="_blank" class="contact-item">
+          <span class="ci-icon">in</span>
+          <div class="ci-content">
+            <div class="ci-label">LinkedIn</div>
+            <div class="ci-value">linkedin.com/in/pranjalps/</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-right reveal">
+      <div class="cr-label">What Happens Next</div>
+      <div class="cr-title">How to Work With Pranjal Singh</div>
+      <div class="process-steps">
+        <div class="ps-item">
+          <span class="ps-step">01</span>
+          <div class="ps-content">
+            <div class="ps-title">Your initial message</div>
+            <p class="ps-desc">Describe the challenge, the context, and what you are trying to achieve. The more specific, the better.</p>
+          </div>
+        </div>
+        <div class="ps-item">
+          <span class="ps-step">02</span>
+          <div class="ps-content">
+            <div class="ps-title">A focused conversation</div>
+            <p class="ps-desc">If the brief fits, a conversation to diagnose the specific problem and establish whether my approach is the right one for it.</p>
+          </div>
+        </div>
+        <div class="ps-item">
+          <span class="ps-step">03</span>
+          <div class="ps-content">
+            <div class="ps-title">A clear proposal</div>
+            <p class="ps-desc">If there is a mutual fit, I provide a clear scope, deliverables, and commercial structure.</p>
+          </div>
+        </div>
+        <div class="ps-item">
+          <span class="ps-step">04</span>
+          <div class="ps-content">
+            <div class="ps-title">The work begins</div>
+            <p class="ps-desc">From day one, the focus is on the commercial outcome, not the process. I build systems that continue to work after the engagement ends.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING STATEMENT -->
+  <div class="closing-statement reveal">
+    <div class="cs-quote">
+      I build the marketing foundation that drives <em>commercial growth</em>, not just campaigns that run and stop.
+    </div>
+  </div>
+
+  <!-- FOOTER CTA -->
+  <div class="footer-cta reveal">
+    <div class="fc-headline">Have a specific brief in mind?</div>
+    <p class="fc-body">Send a note with the challenge, the context, and what you are trying to achieve. The more specific, the better.</p>
+    <a href="mailto:pranjal1731@gmail.com" class="fc-btn">Send a note &#8594;</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-copy">&#169; 2026 Pranjal Singh</span>
+    <span class="footer-tagline">Marketing that builds brands and drives growth.</span>
+    <a href="https://linkedin.com/in/pranjalps/" target="_blank" class="footer-li">LinkedIn &#8594;</a>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

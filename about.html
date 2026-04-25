@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Pranjal Singh</title>
+  <meta name="description" content="About Pranjal Singh, a brand and growth marketer combining consumer insight, brand strategy, and growth engineering across FMCG, D2C, and B2B markets." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #121212;
+      --surface:      #1A1A1A;
+      --surface2:     #1A1A1A;
+      --text:         #E5E7EB;
+      --muted:        #9CA3AF;
+      --dim:          #687280;
+      --gold:         #D4AF37;
+      --orange:       #F97316;
+      --gold-dim:     rgba(212,175,55,0.10);
+      --orange-dim:   rgba(249,115,22,0.10);
+      --border:       rgba(255,255,255,0.06);
+      --border-gold:  rgba(212,175,55,0.3);
+      --ff-sans:      'Manrope', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--ff-sans); font-size: 16px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 72px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px;
+      background: rgba(18,18,18,0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      transition: border-color .3s;
+    }
+    nav.scrolled { border-bottom-color: rgba(212,175,55,0.12); }
+
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-logo-mark { font-family: var(--ff-sans); font-weight: 700; font-size: 20px; color: var(--gold); }
+    .nav-logo-name { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    .nav-links { display: flex; align-items: center; gap: 40px; }
+    .nav-links a {
+      font-size: 13px; color: var(--muted); letter-spacing: 0.05em;
+      transition: color .2s; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left; transition: transform .25s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--text); }
+
+    .nav-cta {
+      font-size: 12px; color: var(--orange); border: 1px solid rgba(249,115,22,0.4);
+      padding: 9px 22px; letter-spacing: 0.06em; transition: all .25s;
+      background: var(--orange-dim);
+    }
+    .nav-cta:hover { background: rgba(249,115,22,0.18); }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 148px 56px 80px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .ph-eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .ph-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .ph-headline { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(40px, 4.5vw, 64px); line-height: 1.1; color: var(--text); letter-spacing: -0.02em; }
+    .ph-headline em { color: var(--orange); font-style: normal; }
+    .ph-right { padding-top: 35px; }
+    .ph-body { font-size: 16px; line-height: 1.8; color: var(--muted); margin-bottom: 28px; }
+    .ph-body strong { color: var(--text); font-weight: 600; }
+
+    /* QUICK STATS */
+    .quick-stats {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+    }
+    .qs-item { flex: 1; padding: 36px 40px; border-right: 1px solid var(--border); }
+    .qs-item:last-child { border-right: none; }
+    .qs-num { font-family: var(--ff-sans); font-weight: 700; font-size: 32px; color: var(--orange); display: block; margin-bottom: 6px; letter-spacing: -0.01em; }
+    .qs-label { font-size: 12px; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* SECTIONS */
+    .section { padding: 88px 56px; }
+    .section.alt { background: var(--surface); }
+    .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+    .section-title { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(28px, 3vw, 40px); color: var(--text); line-height: 1.2; margin-bottom: 48px; letter-spacing: -0.01em; }
+
+    /* CAREER TIMELINE (HORIZONTAL) */
+    .narrative-intro { font-size: 15px; color: var(--muted); font-style: italic; margin-bottom: 56px; line-height: 1.75; max-width: 720px; }
+    .timeline {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 32px; position: relative;
+    }
+    .t-step { position: relative; padding-top: 64px; }
+    .t-step::before {
+      content: ''; position: absolute;
+      top: 38px; left: 0; right: -32px;
+      height: 1px; background: rgba(212,175,55,0.25);
+    }
+    .t-step:last-child::before { right: 0; }
+    .t-step::after {
+      content: ''; position: absolute;
+      top: 32px; left: 0;
+      width: 13px; height: 13px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px var(--bg);
+      z-index: 2;
+    }
+    .t-period {
+      position: absolute; top: 0; left: 0;
+      font-size: 11px; letter-spacing: 0.16em; color: var(--gold);
+      text-transform: uppercase; font-weight: 600;
+    }
+    .t-role { font-size: 17px; color: var(--text); font-weight: 600; margin-bottom: 14px; line-height: 1.3; }
+    .t-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* SYNTHESIS FLOWCHART */
+    .flowchart { display: flex; align-items: stretch; gap: 0; }
+    .flow-step {
+      flex: 1; padding: 44px 36px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: border-color .3s;
+    }
+    .flow-step:hover { border-color: var(--border-gold); }
+    .flow-arrow {
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 8px; color: var(--gold); font-size: 22px; flex-shrink: 0;
+    }
+    .flow-num { font-family: var(--ff-sans); font-weight: 700; font-size: 36px; color: var(--gold); opacity: 0.4; display: block; margin-bottom: 20px; }
+    .flow-title { font-size: 18px; color: var(--text); font-weight: 600; margin-bottom: 14px; }
+    .flow-body { font-size: 14px; color: var(--muted); line-height: 1.75; }
+
+    /* TOOLS */
+    .tools-grid { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+    .tool-badge {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      font-size: 13px; color: var(--muted);
+      transition: border-color .25s, color .25s;
+    }
+    .tool-badge:hover { border-color: var(--border-gold); color: var(--text); }
+    .tool-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+
+    /* CREDENTIALS */
+    .cred-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .cred-item {
+      background: var(--bg); padding: 36px;
+      border: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 24px;
+    }
+    .section.alt .cred-item { background: var(--bg); }
+    .cred-logo {
+      width: 56px; height: 56px; flex-shrink: 0;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-weight: 600; font-size: 10px; color: var(--gold);
+      letter-spacing: 0.05em; text-align: center; line-height: 1.3;
+    }
+    .cred-type { font-size: 10px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    .cred-title { font-size: 17px; color: var(--text); font-weight: 600; margin-bottom: 4px; }
+    .cred-org { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .cred-year { font-family: var(--ff-sans); font-weight: 500; font-size: 13px; color: var(--dim); }
+
+    /* DISSERTATION CTA */
+    .dissertation-cta {
+      padding: 52px 56px; background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 56px; flex-wrap: wrap;
+    }
+    .dc-left { flex: 1; min-width: 280px; }
+    .dc-label { font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+    .dc-title { font-family: var(--ff-sans); font-weight: 700; font-size: 24px; color: var(--text); line-height: 1.3; margin-bottom: 12px; letter-spacing: -0.01em; max-width: 520px; }
+    .dc-body { font-size: 14px; color: var(--muted); line-height: 1.75; max-width: 520px; }
+    .dc-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange);
+      padding: 14px 28px; letter-spacing: 0.05em; transition: all .25s; white-space: nowrap;
+    }
+    .dc-btn:hover { background: var(--orange); color: var(--bg); }
+
+    /* FOOTER CTA */
+    .footer-cta {
+      padding: 80px 56px; text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .fc-headline { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(28px, 3vw, 40px); color: var(--text); margin-bottom: 18px; letter-spacing: -0.01em; }
+    .fc-body { font-size: 15px; color: var(--muted); max-width: 460px; margin: 0 auto 36px; line-height: 1.75; }
+    .fc-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange);
+      padding: 14px 32px; letter-spacing: 0.05em; transition: all .25s;
+    }
+    .fc-btn:hover { background: var(--orange); color: var(--bg); }
+
+    /* FOOTER */
+    footer {
+      padding: 24px 56px; background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy    { font-size: 11px; color: var(--dim); }
+    .footer-tagline { font-size: 11px; color: var(--dim); font-style: italic; }
+    .footer-li      { font-size: 11px; color: var(--gold); transition: opacity .2s; }
+    .footer-li:hover { opacity: .7; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    .anim { animation: fadeUp .75s ease both; }
+    .d1 { animation-delay: .08s; }
+    .d2 { animation-delay: .22s; }
+    .d3 { animation-delay: .38s; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .page-hero { grid-template-columns: 1fr; padding: 120px 24px 56px; gap: 40px; }
+      .quick-stats { flex-wrap: wrap; }
+      .qs-item { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
+      .section { padding: 56px 24px; }
+      .timeline { grid-template-columns: 1fr; gap: 0; }
+      .t-step { padding-top: 0; padding-left: 32px; padding-bottom: 32px; }
+      .t-step::before { top: 0; bottom: 0; left: 6px; right: auto; width: 1px; height: auto; }
+      .t-step:last-child::before { bottom: 50%; }
+      .t-step::after { top: 4px; left: 0; }
+      .t-period { position: static; display: block; margin-bottom: 12px; }
+      .flowchart { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); padding: 8px 0; }
+      .cred-grid { grid-template-columns: 1fr; }
+      .dissertation-cta { padding: 48px 24px; flex-direction: column; gap: 32px; }
+      .footer-cta { padding: 60px 24px; }
+      footer { padding: 20px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-logo">
+      <a href="index.html" class="nav-logo-mark">PS</a>
+      <span class="nav-logo-name">Pranjal Singh</span>
+    </div>
+    <div class="nav-links">
+      <a href="about.html" class="active">About</a>
+      <a href="insights.html">Insights</a>
+    </div>
+    <a href="connect.html" class="nav-cta">Connect &#8594;</a>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="ph-left">
+      <div class="ph-eyebrow anim d1">About</div>
+      <h1 class="ph-headline anim d2">
+        A Brand Marketer<br>
+        Who Thinks<br>
+        <em>in Systems.</em>
+      </h1>
+    </div>
+    <div class="ph-right anim d3">
+      <p class="ph-body">Most marketing fails because it treats brand and growth as <strong>competing investments,</strong> a budget negotiation rather than a compounding strategy. I have spent my career building the opposite case.</p>
+      <p class="ph-body">The same consumer insight that builds brand salience in week one is the same insight that informs lifecycle targeting in month six. They are not different investments. They are different <strong>time horizons of the same investment.</strong></p>
+    </div>
+  </div>
+
+  <!-- QUICK STATS -->
+  <div class="quick-stats reveal">
+    <div class="qs-item">
+      <span class="qs-num">3+</span>
+      <span class="qs-label">Years of experience</span>
+    </div>
+    <div class="qs-item">
+      <span class="qs-num">&#8377;2Cr+</span>
+      <span class="qs-label">Cumulative A&amp;P budget managed</span>
+    </div>
+    <div class="qs-item">
+      <span class="qs-num">6</span>
+      <span class="qs-label">Industries</span>
+    </div>
+    <div class="qs-item">
+      <span class="qs-num">3</span>
+      <span class="qs-label">Continents</span>
+    </div>
+    <div class="qs-item">
+      <span class="qs-num">2</span>
+      <span class="qs-label">Master's degrees</span>
+    </div>
+  </div>
+
+  <!-- CAREER NARRATIVE -->
+  <section class="section">
+    <div class="section-label reveal">The Sequence Was Deliberate</div>
+    <h2 class="section-title reveal">Career Narrative</h2>
+    <p class="narrative-intro reveal">From India to the UK and back. Every role, every market, every brief added a layer. This is the sequence.</p>
+
+    <div class="timeline reveal">
+
+      <div class="t-step">
+        <div class="t-period">2019 to 2021</div>
+        <div class="t-role">The Foundation</div>
+        <p class="t-body">An MBA in Marketing. The strategic bedrock. Brand management, consumer behaviour, and the commercial frameworks every subsequent role was built on.</p>
+      </div>
+
+      <div class="t-step">
+        <div class="t-period">2021 to 2022</div>
+        <div class="t-role">The Agency</div>
+        <p class="t-body">Eighteen clients. One year. Speed and pattern recognition built under pressure across categories.</p>
+      </div>
+
+      <div class="t-step">
+        <div class="t-period">2022 to 2023</div>
+        <div class="t-role">The Laboratory</div>
+        <p class="t-body">Two in-house roles. Two constraints. One 7-figure budget, one without. A well-built system consistently outperforms a well-funded campaign.</p>
+      </div>
+
+      <div class="t-step">
+        <div class="t-period">2023 to 2024</div>
+        <div class="t-role">The Framework</div>
+        <p class="t-body">A deliberate move to formalise the thinking. Research into how brands build equity across international and emerging markets.</p>
+      </div>
+
+      <div class="t-step">
+        <div class="t-period">2025 to Present</div>
+        <div class="t-role">The Current Expression</div>
+        <p class="t-body">Brand strategy and growth engineering, made smarter with AI. Systems that compound over time, where every decision has a measurable commercial output.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- THE SYNTHESIS FLOWCHART -->
+  <section class="section alt">
+    <div class="section-label reveal">What Makes My Approach Unusual</div>
+    <h2 class="section-title reveal">The Synthesis</h2>
+    <div class="flowchart reveal">
+
+      <div class="flow-step">
+        <span class="flow-num">01</span>
+        <div class="flow-title">Problem Analysis</div>
+        <p class="flow-body">Understanding consumer behaviour, market dynamics, and competitive positioning across categories and geographies. Every brand strategy begins with a precise consumer insight research process, not assumptions.</p>
+      </div>
+
+      <div class="flow-arrow">&#8594;</div>
+
+      <div class="flow-step">
+        <span class="flow-num">02</span>
+        <div class="flow-title">Brand Strategy</div>
+        <p class="flow-body">Translating insight into brand positioning strategy, identity, communication, and campaign execution. Every element working as one system to build equity and drive commercial value across markets.</p>
+      </div>
+
+      <div class="flow-arrow">&#8594;</div>
+
+      <div class="flow-step">
+        <span class="flow-num">03</span>
+        <div class="flow-title">Growth Engineering</div>
+        <p class="flow-body">Converting brand positioning into measurable revenue through content marketing, visual storytelling, lifecycle automation, acquisition frameworks, and performance marketing systems built to compound over time.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section">
+    <div class="section-label reveal">Stack</div>
+    <h2 class="section-title reveal">Tools I Work With</h2>
+    <div class="tools-grid reveal">
+      <div class="tool-badge"><span class="tool-dot"></span>Google Ads</div>
+      <div class="tool-badge"><span class="tool-dot"></span>Meta Ads</div>
+      <div class="tool-badge"><span class="tool-dot"></span>HubSpot</div>
+      <div class="tool-badge"><span class="tool-dot"></span>Sanity CMS</div>
+      <div class="tool-badge"><span class="tool-dot"></span>N8N</div>
+      <div class="tool-badge"><span class="tool-dot"></span>Google Analytics</div>
+      <div class="tool-badge"><span class="tool-dot"></span>SEMrush</div>
+      <div class="tool-badge"><span class="tool-dot"></span>Canva</div>
+      <div class="tool-badge"><span class="tool-dot"></span>Zapier</div>
+      <div class="tool-badge"><span class="tool-dot"></span>Mailchimp</div>
+    </div>
+  </section>
+
+  <!-- CREDENTIALS -->
+  <section class="section alt">
+    <div class="section-label reveal">Education</div>
+    <h2 class="section-title reveal">Credentials</h2>
+    <div class="cred-grid reveal">
+
+      <div class="cred-item">
+        <div class="cred-logo">Cardiff<br>Univ.</div>
+        <div class="cred-content">
+          <div class="cred-type">Postgraduate</div>
+          <div class="cred-title">MSc International Management</div>
+          <div class="cred-org">Cardiff University &middot; UK</div>
+          <div class="cred-year">2023 to 2024</div>
+        </div>
+      </div>
+
+      <div class="cred-item">
+        <div class="cred-logo">IMT<br>Ghaz.</div>
+        <div class="cred-content">
+          <div class="cred-type">Postgraduate</div>
+          <div class="cred-title">MBA, Marketing</div>
+          <div class="cred-org">IMT Ghaziabad &middot; India</div>
+          <div class="cred-year">2019 to 2021</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DISSERTATION CTA -->
+  <div class="dissertation-cta reveal">
+    <div class="dc-left">
+      <div class="dc-label">Download</div>
+      <div class="dc-title">How the World's Biggest Brands Stay Consistent and Still Feel Local</div>
+      <p class="dc-body">A framework from my MSc dissertation. Three brand behaviours, how they show up in advertising, and a diagnostic to identify where your brand sits on the spectrum.</p>
+    </div>
+    <a href="#" class="dc-btn">Download the Playbook &#8594;</a>
+  </div>
+
+  <!-- FOOTER CTA -->
+  <div class="footer-cta reveal">
+    <div class="fc-headline">Ready to work together?</div>
+    <p class="fc-body">I work with growth-focused founders and marketing teams on challenges where commercial precision matters.</p>
+    <a href="connect.html" class="fc-btn">Connect &#8594;</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-copy">&#169; 2026 Pranjal Singh</span>
+    <span class="footer-tagline">Marketing that builds brands and drives growth.</span>
+    <a href="https://linkedin.com/in/pranjalps/" target="_blank" class="footer-li">LinkedIn &#8594;</a>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

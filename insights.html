@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insights | Pranjal Singh</title>
+  <meta name="description" content="Marketing frameworks, case dissections, and market observations from Pranjal Singh, brand and growth practitioner." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #121212;
+      --surface:      #1A1A1A;
+      --surface2:     #1A1A1A;
+      --text:         #E5E7EB;
+      --muted:        #9CA3AF;
+      --dim:          #687280;
+      --gold:         #D4AF37;
+      --orange:       #F97316;
+      --gold-dim:     rgba(212,175,55,0.10);
+      --orange-dim:   rgba(249,115,22,0.10);
+      --border:       rgba(255,255,255,0.06);
+      --border-gold:  rgba(212,175,55,0.3);
+      --ff-sans:      'Manrope', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--ff-sans); font-size: 16px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 72px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px;
+      background: rgba(18,18,18,0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      transition: border-color .3s;
+    }
+    nav.scrolled { border-bottom-color: rgba(212,175,55,0.12); }
+
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-logo-mark { font-family: var(--ff-sans); font-weight: 700; font-size: 20px; color: var(--gold); }
+    .nav-logo-name { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    .nav-links { display: flex; align-items: center; gap: 40px; }
+    .nav-links a {
+      font-size: 13px; color: var(--muted); letter-spacing: 0.05em;
+      transition: color .2s; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left; transition: transform .25s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--text); }
+
+    .nav-cta {
+      font-size: 12px; color: var(--orange); border: 1px solid rgba(249,115,22,0.4);
+      padding: 9px 22px; letter-spacing: 0.06em; transition: all .25s;
+      background: var(--orange-dim);
+    }
+    .nav-cta:hover { background: rgba(249,115,22,0.18); }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 148px 56px 80px;
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .ph-eyebrow {
+      font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .ph-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .ph-headline { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(44px, 5vw, 72px); line-height: 1.05; color: var(--text); letter-spacing: -0.02em; }
+    .ph-headline em { color: var(--orange); font-style: normal; }
+    .ph-right { padding-top: 35px; }
+    .ph-sub { font-size: 16px; color: var(--muted); line-height: 1.8; }
+
+    /* FEATURED POST */
+    .featured-wrap { padding: 0 56px; }
+    .featured-post {
+      border: 1px solid var(--border-gold);
+      background: var(--surface);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      margin-top: 56px;
+    }
+    .fp-left { padding: 56px 48px; border-right: 1px solid var(--border); }
+    .fp-right { padding: 56px 48px; display: flex; flex-direction: column; justify-content: space-between; }
+    .fp-tag {
+      font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px; font-weight: 600;
+    }
+    .fp-tag::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
+    .fp-title { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(24px, 2.5vw, 34px); color: var(--text); line-height: 1.3; margin-bottom: 24px; letter-spacing: -0.01em; }
+    .fp-excerpt { font-size: 15px; color: var(--muted); line-height: 1.8; }
+    .fp-meta { margin-top: 24px; font-size: 12px; color: var(--dim); }
+    .fp-body-text { font-size: 15px; color: var(--muted); line-height: 1.85; }
+    .fp-body-text p { margin-bottom: 18px; }
+    .fp-body-text p:last-child { margin-bottom: 0; }
+    .fp-body-text strong { color: var(--text); font-weight: 600; }
+    .fp-ctas { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 32px; }
+    .fp-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange);
+      padding: 12px 24px; letter-spacing: 0.05em; transition: all .25s;
+    }
+    .fp-btn-primary:hover { background: var(--orange); color: var(--bg); }
+    .fp-btn-ghost { font-size: 13px; color: var(--muted); padding: 12px 0; transition: color .2s; }
+    .fp-btn-ghost:hover { color: var(--text); }
+
+    /* ARTICLE FILTERS */
+    .filters-bar {
+      padding: 24px 56px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-size: 11px; letter-spacing: 0.12em; color: var(--dim);
+      text-transform: uppercase; padding: 6px 16px;
+      border: 1px solid transparent; cursor: pointer; transition: all .2s;
+      background: none; font-family: var(--ff-sans);
+    }
+    .filter-btn:hover { color: var(--text); border-color: var(--border); }
+    .filter-btn.active { color: var(--gold); border-color: rgba(212,175,55,0.3); }
+
+    /* ARTICLES GRID */
+    .articles-section { padding: 56px 56px 96px; }
+    .articles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+    .article-card {
+      padding: 40px; background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color .25s, background .25s; cursor: pointer; display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+    }
+    .article-card:hover { border-color: var(--border-gold); background: rgba(212,175,55,0.03); }
+    .ac-tag { font-size: 10px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; font-weight: 600; }
+    .ac-title { font-size: 20px; color: var(--text); line-height: 1.4; margin-bottom: 14px; font-weight: 600; flex: 1; }
+    .ac-excerpt { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+    .ac-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); padding-top: 20px;
+    }
+    .ac-read { font-size: 12px; color: var(--orange); letter-spacing: 0.08em; font-weight: 600; }
+    .ac-type { font-size: 11px; color: var(--dim); }
+
+    /* FOOTER CTA */
+    .footer-cta {
+      padding: 80px 56px; text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .fc-headline { font-family: var(--ff-sans); font-weight: 700; font-size: clamp(28px, 3vw, 40px); color: var(--text); margin-bottom: 18px; letter-spacing: -0.01em; }
+    .fc-body { font-size: 15px; color: var(--muted); max-width: 460px; margin: 0 auto 36px; line-height: 1.75; }
+    .fc-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange);
+      padding: 14px 32px; letter-spacing: 0.05em; transition: all .25s;
+    }
+    .fc-btn:hover { background: var(--orange); color: var(--bg); }
+
+    /* FOOTER */
+    footer {
+      padding: 24px 56px; background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy    { font-size: 11px; color: var(--dim); }
+    .footer-tagline { font-size: 11px; color: var(--dim); font-style: italic; }
+    .footer-li      { font-size: 11px; color: var(--gold); transition: opacity .2s; }
+    .footer-li:hover { opacity: .7; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    .anim { animation: fadeUp .75s ease both; }
+    .d1 { animation-delay: .08s; }
+    .d2 { animation-delay: .22s; }
+    .d3 { animation-delay: .38s; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .page-hero { grid-template-columns: 1fr; padding: 120px 24px 56px; gap: 40px; }
+      .ph-right { padding-top: 0; }
+      .featured-wrap { padding: 0 24px; }
+      .featured-post { grid-template-columns: 1fr; }
+      .fp-left { border-right: none; border-bottom: 1px solid var(--border); padding: 36px 28px; }
+      .fp-right { padding: 36px 28px; }
+      .filters-bar { padding: 20px 24px; }
+      .articles-section { padding: 40px 24px 64px; }
+      .articles-grid { grid-template-columns: 1fr; }
+      .article-full { padding: 36px 24px; }
+      .footer-cta { padding: 60px 24px; }
+      footer { padding: 20px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-logo">
+      <a href="index.html" class="nav-logo-mark">PS</a>
+      <span class="nav-logo-name">Pranjal Singh</span>
+    </div>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="insights.html" class="active">Insights</a>
+    </div>
+    <a href="connect.html" class="nav-cta">Connect &#8594;</a>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div>
+      <div class="ph-eyebrow anim d1">Playbooks</div>
+      <h1 class="ph-headline anim d2">Observation.<br>Methodology.<br><em>Solutions.</em></h1>
+    </div>
+    <div class="ph-right anim d3">
+      <p class="ph-sub">From problem to perspective. Insights drawn from real campaigns, takes on emerging marketing tools, and frameworks for the challenges most marketers are still figuring out.</p>
+    </div>
+  </div>
+
+  <!-- FEATURED POST -->
+  <div class="featured-wrap reveal">
+    <div class="featured-post">
+      <div class="fp-left">
+        <div class="fp-tag">Featured &middot; Download Available</div>
+        <div class="fp-title">The Challenger Brand Communication Architecture: A Framework for Marketing in High-Asymmetry Markets</div>
+        <p class="fp-excerpt">Most brand strategy frameworks were built for markets where the challenger has a budget disadvantage of 2 to 3x. In Indian FMCG, the asymmetry is often 10 to 20x. This framework reorients the strategy from "spend less, be smarter" to "choose the terrain where your constraints become advantages."</p>
+        <div class="fp-meta">Based on Cardiff University MSc Dissertation &middot; 2024</div>
+      </div>
+      <div class="fp-right">
+        <div class="fp-body-text">
+          <p>Most multinational brands entering new markets get it wrong in the same way. They assume the problem is translation: change the language, tweak the visuals, and the campaign will perform. It rarely does.</p>
+          <p>The real issue is structural. A brand's position on the global-local spectrum determines its entire signalling architecture, what it says, where it says it, how much it costs, and how much of it lands with the intended audience. This framework maps three distinct brand types against two axes and documents what effective advertising looks like for each.</p>
+          <p>Drawn from original qualitative research on 11 campaigns across the Indian retail sector, it is the kind of thing most brand strategists build through trial and error over years. The research compressed that into a single, usable reference.</p>
+        </div>
+        <div class="fp-ctas">
+          <a href="#" class="fp-btn-primary">Download the Framework PDF &#8594;</a>
+          <a href="#" class="fp-btn-ghost">Read more &#8595;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-bar reveal">
+    <button class="filter-btn active" onclick="filterArticles('all', this)">All</button>
+    <button class="filter-btn" onclick="filterArticles('framework', this)">Frameworks</button>
+    <button class="filter-btn" onclick="filterArticles('observation', this)">Market Observations</button>
+    <button class="filter-btn" onclick="filterArticles('methodology', this)">Methodology</button>
+    <button class="filter-btn" onclick="filterArticles('dissection', this)">Case Dissections</button>
+  </div>
+
+  <!-- ARTICLES GRID -->
+  <div class="articles-section">
+    <div class="articles-grid" id="articles-grid">
+
+      <!-- Article 1 -->
+      <a class="article-card" data-type="framework" href="#">
+        <div class="ac-tag">Framework</div>
+        <div class="ac-title">The Brand-Growth Flywheel: Why D2C Brands Treating Awareness as a Cost Centre Are Building a Leaking Bucket</div>
+        <p class="ac-excerpt">Splitting brand and performance into separate budgets with separate KPIs is not just an organisational quirk. It is a structural guarantee of diminishing returns. Here is the architecture that fixes it.</p>
+        <div class="ac-footer">
+          <span class="ac-read">Read &#8594;</span>
+          <span class="ac-type">5 min</span>
+        </div>
+      </a>
+
+      <!-- Article 2 -->
+      <a class="article-card" data-type="observation" href="#">
+        <div class="ac-tag">Market Observation</div>
+        <div class="ac-title">AI in Marketing Operations: What Is Real, What Is Hype, and What Is Actually Compounding</div>
+        <p class="ac-excerpt">Most marketing teams approach AI the way they approach a new channel. The problem is that AI is not a channel. It is an operating layer. After building lifecycle workflows that cut response time by 70%, here is where the real value sits.</p>
+        <div class="ac-footer">
+          <span class="ac-read">Read &#8594;</span>
+          <span class="ac-type">6 min</span>
+        </div>
+      </a>
+
+      <!-- Article 3 -->
+      <a class="article-card" data-type="methodology" href="#">
+        <div class="ac-tag">Methodology</div>
+        <div class="ac-title">How to Diagnose a Leaking D2C Funnel Without a Dedicated Data Team</div>
+        <p class="ac-excerpt">Most D2C brands respond to a conversion problem by increasing ad spend. If the funnel is leaking, that logic becomes expensive. A 28% improvement in conversion rate did not come from more budget. It came from a structured GA4 audit that took a week.</p>
+        <div class="ac-footer">
+          <span class="ac-read">Read &#8594;</span>
+          <span class="ac-type">5 min</span>
+        </div>
+      </a>
+
+      <!-- Article 4 -->
+      <a class="article-card" data-type="dissection" href="#">
+        <div class="ac-tag">Case Dissection</div>
+        <div class="ac-title">What the IPL Teaches Us About Media Bets That Actually Move the Needle</div>
+        <p class="ac-excerpt">Challenger brands entering expensive media environments almost always ask the wrong question. How much reach can we buy? This post diagnoses the real upstream problem, and why a single, well-placed media bet delivered 45% sales uplift and 4.28 ROAS.</p>
+        <div class="ac-footer">
+          <span class="ac-read">Read &#8594;</span>
+          <span class="ac-type">5 min</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- FOOTER CTA -->
+  <div class="footer-cta reveal">
+    <div class="fc-headline">Have a framework that should be here?</div>
+    <p class="fc-body">These pieces are written from real campaign experience. If you are working on a similar challenge, let us talk through it.</p>
+    <a href="connect.html" class="fc-btn">Connect &#8594;</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-copy">&#169; 2026 Pranjal Singh</span>
+    <span class="footer-tagline">Marketing that builds brands and drives growth.</span>
+    <a href="https://linkedin.com/in/pranjalps/" target="_blank" class="footer-li">LinkedIn &#8594;</a>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    function filterArticles(type, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.article-card').forEach(card => {
+        const show = type === 'all' || card.dataset.type === type;
+        card.style.display = show ? 'flex' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>
