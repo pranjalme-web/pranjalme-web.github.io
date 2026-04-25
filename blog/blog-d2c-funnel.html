@@ -1,232 +1,3 @@
-
-My Website
-/
-Claude is responding
-You said: can you please nalyse the navigatioon specially thehamburger style navigation
-
-index (2).html
-html
-
-can you please nalyse the navigatioon specially  thehamburger style navigation
-
-19:39
-Claude responded: Here's a thorough breakdown of the navigation and hamburger implementation:
-
-Reading the uploaded homepage HTML file
-Reading the uploaded homepage HTML file
-Here's a thorough breakdown of the navigation and hamburger implementation:
-
-Structure
-
-The nav has three logical zones: logo left, links centre, CTA right on desktop. On mobile (below 900px), the links and CTA are hidden, the hamburger appears, and a separate div.mobile-menu drops in below the fixed nav bar. Clean separation of concerns.
-
-What's working well
-
-The hamburger animation is solid. Three <span> bars animate into an X using translateY + rotate on the first and third, with the middle bar fading and collapsing via scaleX(0). The 6.5px translate value is correct for a 1.5px bar height with 5px gap between bars, so the X aligns properly without overlap or gap. Bars turn gold on open state, which respects the design system.
-
-The max-height transition on .mobile-menu is a pragmatic choice. It allows a CSS-only open/close animation without JS toggling display. Works fine at this menu scale.
-
-Accessibility is handled: aria-label="Toggle navigation" on the button, aria-expanded toggled dynamically in the script, and role="navigation" with a label on the mobile menu. That's more than most portfolio sites bother with.
-
-Outside-click to close and auto-close on link click are both implemented. No loose ends there.
-
-Issues and gaps worth flagging
-
-1. The mobile menu display: flex problem
-
-In the CSS, .mobile-menu has display: none by default, and the responsive block sets it to display: flex. But the open/close animation relies on max-height transitioning from 0 to 300px. The issue: when the element has display: none at base styles and display: flex only inside the media query, the transition works on mobile. However, this is fragile. If someone resizes the viewport mid-session, the display value can conflict with the open state. A more robust approach is to keep display: flex always and control visibility purely through max-height and overflow: hidden, setting max-height: 0 at desktop sizes.
-
-2. max-height: 300px is a hard-coded guess
-
-Three links comfortably fit within 300px, but if you ever add a fourth link or the font scales up on certain devices, items could get clipped. A safer ceiling is something like 500px or even 600px. The animation speed won't be noticeably affected.
-
-3. No Escape key listener
-
-On desktop, keyboard users who accidentally trigger the hamburger (or navigate to it via tab) have no way to close the menu with Escape. One line fixes this:
-
-js
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { /* close menu */ }
-});
-4. The active link state isn't set on the homepage
-
-Desktop nav links have an .active class that triggers the gold underline, but no link in the HTML has this class applied. On the homepage, there's no link to "Home" anyway, so the active state is purely for About/Insights on their respective pages. Worth checking that those pages actually apply .active to the correct link.
-
-5. Hamburger button is <button> with no visible focus ring
-
-There's no custom focus style on .nav-hamburger. The browser default may render inconsistently across browsers and dark backgrounds. Worth adding a small outline or box-shadow on :focus-visible.
-
-Summary
-
-The foundation is solid. The animation logic is correct, accessibility basics are covered, and the JS event handling covers the common edge cases. The fragile areas are the display conflict on resize and the hard-coded max-height. Neither would break the experience in normal use, but both are worth tightening before deploying.
-
-You said: can you please edit this connect page so that it matches the index page hamburger style navigation.
-
-connect (3).html
-html
-
-can you please edit this connect page so that it matches the index page hamburger style navigation. also please edit about to about me
-
-19:40
-Claude responded: Got everything I need.
-
-Viewed 2 files
-Viewed 2 files
-Got everything I need. Two changes: add the full hamburger nav from index (styles + HTML + JS), and update "About" to "About Me" across nav and mobile menu. Everything else stays untouched.
-
-
-Read the skill file for frontend design
-Read the skill file for frontend design
-Now building the updated file:
-
-
-Edited 3 files, ran 2 commands, read a file
-Edited 3 files, ran 2 commands, read a file
-Done. Here's what changed:
-
-Hamburger nav (matching index exactly):
-
-Added full .nav-hamburger and .mobile-menu CSS blocks with identical animation values (22px bars, 1.5px height, 6.5px translate for the X, gold colour on open state)
-max-height bumped to 500px rather than the 300px on index, since this page could have more links added later
-Hamburger button added to the nav HTML with aria-label and aria-expanded
-Mobile menu div inserted immediately after </nav> with all three links
-"About Me" update:
-
-Changed in both the desktop .nav-links and the mobile menu
-JS:
-
-Full hamburger script block added: open/close toggle, close on link click, close on outside click, and the Escape key listener (bonus fix from the audit, since index page is missing it too)
-
-Connect
-Code · HTML 
-You said: Can you plese do the above two edits to this also
-
-insights (2).html
-html
-
-Can you plese do the above two edits to this also
-
-19:45
-Claude responded: Done.
-
-Edited 3 files, viewed 2 files, ran 2 commands
-Edited 3 files, viewed 2 files, ran 2 commands
-Done. Same two changes applied:
-
-Hamburger CSS, HTML button, and mobile menu div added, matching the index page exactly
-Responsive block updated with display: none on .nav-cta and the hamburger/mobile menu show rules
-"About" updated to "About Me" in both desktop nav and mobile menu
-Full hamburger JS appended alongside the existing filterArticles function, including the Escape key listener
-The filterArticles function is untouched.
-
-
-Insights
-Code · HTML 
-You said: please make the same two changes here
-
-blog-ai-marketing-ops (3).html
-html
-
-please make the same two changes here
-
-19:48
-Claude responded: This one already has a hamburger implementation, just an older/different style.
-
-Viewed 2 files
-Viewed 2 files
-This one already has a hamburger implementation, just an older/different style. I need to replace it entirely with the index page version, and update "About" to "About Me".
-
-
-Edited 4 files, ran 2 commands, read a file
-Edited 4 files, ran 2 commands, read a file
-Done. This file already had a hamburger, so a few extra things were cleaned up beyond the standard two edits:
-
-Old .hamburger CSS replaced entirely with .nav-hamburger matching index (gold bar colour on open state, transform-origin: center, scaleX(0) on middle bar)
-Old .mobile-menu CSS replaced: switched from display: none/flex toggle to the max-height transition approach, with the frosted glass background and gold border
-Responsive block updated: added nav-cta { display: none } and corrected class references to .nav-hamburger and .mobile-menu
-Nav HTML updated with new button class, and About to About Me in both desktop and mobile links
-Old mob-cta class on the Connect link replaced with mobile-cta to match the other pages
-Script replaced with full index-style JS including outside-click and Escape key listeners
-
-Blog ai marketing ops
-Code · HTML 
-You said: please amke the two same edeits here
-
-blog-brand-growth-flywheel (3).html
-html
-
-please amke the two same edeits here
-
-19:52
-Claude responded: Same old hamburger pattern as the AI blog post.
-
-Viewed 2 files
-Viewed 2 files
-Same old hamburger pattern as the AI blog post. Applying the same replacements:
-
-
-Edited 4 files, ran 2 commands, read a file
-Edited 4 files, ran 2 commands, read a file
-Done. Identical set of changes as the AI blog post:
-
-Old .hamburger CSS swapped for .nav-hamburger with gold bar colour on open, scaleX(0) on middle bar, and transform-origin: center
-Old .mobile-menu CSS replaced with the max-height transition version, frosted glass background, gold border
-Responsive block updated with nav-cta { display: none } and corrected class references
-Nav HTML: button class updated, About to About Me in both desktop and mobile links, mob-cta replaced with mobile-cta
-JS: old two-liner replaced with full hamburger script including outside-click and Escape key listeners, all other existing scripts untouched
-
-Blog brand growth flywheel
-Code · HTML 
-You said: Please make the two same edits here
-
-blog-d2c-funnel (2).html
-html
-
-Please make the two same edits here
-
-19:53
-Claude responded: Same old pattern.
-
-Reading the blog post HTML file
-Reading the blog post HTML file
-Same old pattern. Straight in:
-
-
-Edited 2 files, ran a command
-Edited 2 files, ran a command
-Now I need to find the nav HTML — let me check what's in the truncated section:
-
-
-Edited 2 files, viewed a file, ran a command
-Edited 2 files, viewed a file, ran a command
-Done. Same changes as the other two blog posts: hamburger CSS and mobile menu CSS replaced with the index-matching versions, responsive block updated, nav HTML updated with new button class and "About Me", mobile menu links updated with mobile-cta class, and JS replaced with the full version including outside-click and Escape key listeners. All other scripts (progress bar, TOC observer, reveal observer) untouched.
-
-
-Blog d2c funnel
-Code · HTML 
-You said: Please make the two same edits here
-
-blog-ipl-asymmetry (2).html
-html
-
-Please make the two same edits here
-
-19:54
-
-Working
-Working
-
-Reading the blog pos
-
-Want to be notified when Claude responds?
-
-
-
-
-Claude is AI and can make mistakes. Please double-check responses.
-Blog d2c funnel · HTML
-Copy
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -239,7 +10,7 @@ Copy
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
- 
+
     :root {
       --bg:           #121212;
       --surface:      #1A1A1A;
@@ -254,7 +25,7 @@ Copy
       --border-gold:  rgba(212,175,55,0.3);
       --ff-sans:      'Manrope', sans-serif;
     }
- 
+
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg); color: var(--text);
@@ -262,7 +33,7 @@ Copy
       -webkit-font-smoothing: antialiased;
     }
     a { text-decoration: none; color: inherit; }
- 
+
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       height: 72px; display: flex; align-items: center; justify-content: space-between;
@@ -296,7 +67,7 @@ Copy
       background: var(--orange-dim);
     }
     .nav-cta:hover { background: rgba(249,115,22,0.18); }
- 
+
     /* HAMBURGER */
     .nav-hamburger {
       display: none;
@@ -312,7 +83,7 @@ Copy
     .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); background: var(--gold); }
     .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); background: var(--gold); }
- 
+
     /* MOBILE MENU */
     .mobile-menu {
       display: none;
@@ -338,7 +109,7 @@ Copy
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu a:hover { color: var(--text); background: var(--surface); }
     .mobile-menu a.mobile-cta { color: var(--orange); }
- 
+
     .breadcrumb {
       padding-top: 96px; padding-bottom: 0;
       padding-left: 56px; padding-right: 56px;
@@ -350,7 +121,7 @@ Copy
     }
     .breadcrumb a:hover { color: var(--muted); }
     .breadcrumb a::before { content: '←'; font-size: 14px; }
- 
+
     .post-hero {
       padding: 48px 56px 56px;
       max-width: 860px;
@@ -366,25 +137,25 @@ Copy
     }
     .post-pill.orange { border-color: rgba(249,115,22,0.3); color: var(--orange); }
     .post-date { font-size: 12px; color: var(--dim); letter-spacing: 0.06em; }
- 
+
     .post-title {
       font-weight: 700; font-size: clamp(32px, 4.5vw, 54px);
       line-height: 1.08; letter-spacing: -0.02em; color: var(--text);
       margin-bottom: 22px;
     }
     .post-title em { color: var(--orange); font-style: normal; }
- 
+
     .post-lede {
       font-size: 17px; color: var(--muted); line-height: 1.75;
       max-width: 640px; margin-bottom: 32px; font-weight: 400;
     }
- 
+
     .post-reading-meta {
       display: flex; align-items: center; gap: 20px;
       font-size: 12px; color: var(--dim); letter-spacing: 0.04em;
     }
     .post-reading-meta span { display: flex; align-items: center; gap: 6px; }
- 
+
     #progress-bar {
       position: fixed; top: 72px; left: 0; right: 0; height: 2px;
       background: var(--border); z-index: 99;
@@ -393,7 +164,7 @@ Copy
       height: 100%; background: var(--gold); width: 0%;
       transition: width .1s linear;
     }
- 
+
     .post-layout {
       display: grid;
       grid-template-columns: 240px 1fr;
@@ -401,12 +172,12 @@ Copy
       align-items: start;
       max-width: 1120px;
     }
- 
+
     .post-body {
       padding: 64px 56px 80px;
       border-left: 1px solid var(--border);
     }
- 
+
     .post-body h2 {
       font-weight: 700; font-size: clamp(20px, 2.2vw, 26px);
       color: var(--text); line-height: 1.25;
@@ -423,7 +194,7 @@ Copy
     .post-body p:last-child { margin-bottom: 0; }
     .post-body strong { color: var(--text); font-weight: 600; }
     .post-body em { color: var(--muted); font-style: italic; }
- 
+
     .metric-tag {
       display: inline-block;
       background: var(--orange-dim); border: 1px solid rgba(249,115,22,0.2);
@@ -432,7 +203,7 @@ Copy
     .metric-tag.gold-tag {
       background: var(--gold-dim); border-color: rgba(212,175,55,0.2); color: var(--gold);
     }
- 
+
     .pullquote {
       border-left: 2px solid var(--gold); padding: 20px 28px;
       margin: 40px 0; background: var(--gold-dim);
@@ -441,7 +212,7 @@ Copy
       font-size: 18px; color: var(--text); line-height: 1.65;
       font-weight: 600; margin-bottom: 0;
     }
- 
+
     .insight-box {
       background: var(--surface); border: 1px solid var(--border);
       border-left: 3px solid var(--gold);
@@ -455,7 +226,7 @@ Copy
       font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0;
     }
     .insight-box strong { color: var(--text); }
- 
+
     .post-table {
       width: 100%; border-collapse: collapse; margin: 36px 0;
     }
@@ -471,7 +242,7 @@ Copy
     }
     .post-table td:first-child { color: var(--text); font-weight: 500; }
     .post-table tr:last-child td { border-bottom: none; }
- 
+
     .framework-steps { margin: 36px 0; display: flex; flex-direction: column; gap: 0; }
     .fw-step {
       display: grid; grid-template-columns: 48px 1fr;
@@ -485,17 +256,17 @@ Copy
     }
     .fw-content h4 { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 8px; }
     .fw-content p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 0; }
- 
+
     .post-divider {
       width: 40px; height: 1px; background: var(--gold);
       margin: 48px 0; opacity: 0.4;
     }
- 
+
     .post-sidebar {
       padding: 64px 36px;
       position: sticky; top: 72px;
     }
- 
+
     .toc-label {
       font-size: 10px; letter-spacing: 0.2em; color: var(--dim);
       text-transform: uppercase; margin-bottom: 16px;
@@ -508,7 +279,7 @@ Copy
     }
     .toc-list li a:hover { color: var(--muted); border-left-color: var(--border-gold); }
     .toc-list li a.active { color: var(--text); border-left-color: var(--gold); }
- 
+
     .sidebar-section { margin-top: 48px; }
     .sidebar-section-label {
       font-size: 10px; letter-spacing: 0.2em; color: var(--dim);
@@ -521,7 +292,7 @@ Copy
     .sidebar-post-tag { font-size: 10px; letter-spacing: 0.16em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
     .sidebar-post a { font-size: 13px; color: var(--muted); line-height: 1.5; transition: color .2s; }
     .sidebar-post a:hover { color: var(--text); }
- 
+
     .footer-cta {
       padding: 80px 56px; text-align: center;
       border-top: 1px solid var(--border);
@@ -538,7 +309,7 @@ Copy
       letter-spacing: 0.05em; transition: all .25s;
     }
     .fc-btn:hover { background: var(--orange); color: var(--bg); }
- 
+
     footer {
       padding: 24px 56px; background: var(--bg);
       border-top: 1px solid var(--border);
@@ -548,7 +319,7 @@ Copy
     .footer-tagline { font-size: 11px; color: var(--dim); font-style: italic; }
     .footer-li      { font-size: 11px; color: var(--gold); transition: opacity .2s; }
     .footer-li:hover { opacity: .7; }
- 
+
     @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
     .anim { animation: fadeUp .75s ease both; }
     .d1 { animation-delay: .08s; }
@@ -556,7 +327,7 @@ Copy
     .d3 { animation-delay: .36s; }
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
- 
+
     @media (max-width: 900px) {
       nav { padding: 0 24px; }
       .nav-links { display: none; }
@@ -574,9 +345,9 @@ Copy
   </style>
 </head>
 <body>
- 
+
   <div id="progress-bar"><div id="progress-fill"></div></div>
- 
+
   <nav id="nav">
     <div class="nav-logo">
       <a href="../index.html" class="nav-logo-mark">PS</a>
@@ -593,17 +364,17 @@ Copy
       <span></span>
     </button>
   </nav>
- 
+
   <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
     <a href="../about.html">About Me</a>
     <a href="../insights.html">Insights</a>
     <a href="../connect.html" class="mobile-cta">Connect &#8594;</a>
   </div>
- 
+
   <div class="breadcrumb anim d1">
     <a href="../insights.html">All Insights</a>
   </div>
- 
+
   <header class="post-hero">
     <div class="post-pill-row anim d1">
       <span class="post-pill">Framework</span>
@@ -621,9 +392,9 @@ Copy
       <span>For: D2C Growth Marketers &middot; Founders</span>
     </div>
   </header>
- 
+
   <div class="post-layout">
- 
+
     <aside class="post-sidebar">
       <div class="toc-label">In this post</div>
       <ul class="toc-list" id="toc">
@@ -634,48 +405,48 @@ Copy
         <li><a href="#section-5">Segment by device</a></li>
         <li><a href="#section-6">Layer in qualitative data</a></li>
       </ul>
- 
+
     </aside>
- 
+
     <article class="post-body">
- 
+
       <p>
         More traffic in, more revenue out. The logic seems sound until you run it against a funnel that is losing people at the cart stage, or worse, at checkout. At that point you are not scaling a revenue engine. You are scaling a draining bucket.
       </p>
- 
+
       <p>
         A <span class="metric-tag">28%</span> improvement in conversion rate at a D2C brand I worked with did not come from more budget or a new creative direction. It came from a structured audit. GA4 access, a clear framework, and roughly a week of focused diagnostic work.
       </p>
- 
+
       <h2 id="section-1">What a Funnel Audit Actually Means</h2>
- 
+
       <p>
         A D2C funnel audit is not a report. It is a structured process of isolating where buyer intent collapses and why. The goal is not to find every inefficiency simultaneously. Find the single biggest leak, fix it, and move to the next.
       </p>
- 
+
       <p>
         The framework works across most e-commerce setups and requires no SQL, no custom data infrastructure, and no analyst headcount. What it does require is clean event tracking in GA4.
       </p>
- 
+
       <div class="insight-box reveal">
         <div class="insight-box-label">The Upstream Problem</div>
         <p>
           Conversion problems are rarely uniform. They tend to cluster at one specific stage, on one specific device, triggered by one specific friction point. Broad fixes rarely address them. Diagnosis does.
         </p>
       </div>
- 
+
       <h2 id="section-2">Step 1: Confirm Your GA4 Setup Is Actually Tracking</h2>
- 
+
       <p>
         This sounds basic. It is also where most audits stall. Your GA4 property needs to be logging these standard e-commerce events with reliable consistency: <strong>view_item, add_to_cart, view_cart, begin_checkout, purchase</strong>. If these events are missing or misfiring, nothing downstream is trustworthy. For Shopify and WooCommerce, this is typically a toggle or a plugin setting. Fix the tracking first.
       </p>
- 
+
       <h2 id="section-3">Step 2: Set a Benchmark Before You Look for a Problem</h2>
- 
+
       <p>
         The instinct is to open the funnel report and immediately look for the lowest number. The more useful approach is knowing what a healthy funnel looks like before you interpret the data.
       </p>
- 
+
       <table class="post-table">
         <thead>
           <tr>
@@ -692,67 +463,67 @@ Copy
           <tr><td>Cart Abandonment Rate</td><td>~70%</td></tr>
         </tbody>
       </table>
- 
+
       <p>
         These are averages, not targets. Your baseline may differ by category, price point, or traffic source. A 15% Add to Cart to Checkout rate, when the norm sits at 40 to 50%, is a signal that something specific is wrong at the cart stage. That is what calibration does.
       </p>
- 
+
       <h2 id="section-4">Step 3: Build the Funnel Exploration in GA4</h2>
- 
+
       <p>
         Navigate to the Explore tab in GA4. Select Funnel Exploration. Set your five steps using the standard e-commerce events above. Do not use the default overview reports for this. They aggregate too broadly and obscure the step-by-step drop-off rates that actually matter here.
       </p>
- 
+
       <p>
         Once the funnel is visible, identify the step with the steepest deviation from your benchmark. That is your primary choke point. Everything else is secondary until that stage is resolved.
       </p>
- 
+
       <h2 id="section-5">Step 4: Segment by Device and Browser</h2>
- 
+
       <p>
         A funnel leak is rarely universal. When you have found the choke point, apply breakdowns by Device Category and Browser within your Funnel Exploration.
       </p>
- 
+
       <div class="pullquote reveal">
         <p>
           "If checkout-to-purchase completion is 48% on desktop and 11% on mobile, you do not have a pricing issue. You have a mobile UX failure."
         </p>
       </div>
- 
+
       <p>
         An unclickable button, a keyboard that covers a form field, a slow-loading payment script. These are specific, fixable, and often completely invisible to anyone who only tests on a desktop. Mobile commerce accounts for over 60% of total global e-commerce sales (Statista, 2024). A mobile-specific conversion failure is not a secondary problem. It is the problem.
       </p>
- 
+
       <h2 id="section-6">Step 5: Layer In Qualitative Data</h2>
- 
+
       <p>
         GA4 tells you where the leak is and what device is affected. It does not tell you why the user left. Once you have isolated the exact page and device causing the drop-off, open a session recording tool such as Microsoft Clarity or Hotjar. Filter specifically for users who reached the problem stage but did not proceed.
       </p>
- 
+
       <p>
         Watch for rage clicks. Repeated hesitation on a single element. Users opening and closing a shipping cost calculator or repeatedly attempting a promo code that does not apply. The moment frustration overrides intent is usually visible within the first few recordings. An "estimated taxes calculated at checkout" message appearing after a user had already committed psychologically. A broken quantity selector on mobile. These are not abstract UX problems. They are revenue line items.
       </p>
- 
+
       <div class="post-divider"></div>
- 
+
       <p>
         A structured funnel audit typically delivers faster ROI than any acquisition campaign running against a leaking funnel. Fixing a mobile checkout failure that recovers even 10 percentage points of lost completions is worth more, at lower cost, than increasing top-of-funnel traffic by 20%.
       </p>
- 
+
       <p>
         The default move when revenue stalls is to spend more. The upstream question, the one that tends to pay off, is: where is the money already coming in and then leaving? Fix the bucket. Then turn up the tap.
       </p>
- 
+
     </article>
- 
+
   </div>
- 
+
   <div class="footer-cta reveal">
     <div class="fc-headline">If this thinking is relevant to your work</div>
     <p class="fc-body">I'm open to conversations about brand strategy, GTM architecture, or growth systems. No agenda required.</p>
     <a href="../connect.html" class="fc-btn">Connect &#8594;</a>
   </div>
- 
+
   <footer>
     <span class="footer-copy">&copy; 2026 Pranjal Singh</span>
     <span class="footer-tagline">Brand-led. Growth-focused.</span>
@@ -760,23 +531,23 @@ Copy
       <a href="https://linkedin.com/in/pranjalps/" class="footer-li" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </footer>
- 
+
   <script>
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 40);
     });
- 
+
     // Hamburger menu
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
- 
+
     hamburger.addEventListener('click', () => {
       const isOpen = hamburger.classList.toggle('open');
       mobileMenu.classList.toggle('open', isOpen);
       hamburger.setAttribute('aria-expanded', isOpen);
     });
- 
+
     // Close menu on link click
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
@@ -785,7 +556,7 @@ Copy
         hamburger.setAttribute('aria-expanded', false);
       });
     });
- 
+
     // Close menu on outside click
     document.addEventListener('click', (e) => {
       if (!nav.contains(e.target) && !mobileMenu.contains(e.target)) {
@@ -794,7 +565,7 @@ Copy
         hamburger.setAttribute('aria-expanded', false);
       }
     });
- 
+
     // Close menu on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -803,7 +574,7 @@ Copy
         hamburger.setAttribute('aria-expanded', false);
       }
     });
- 
+
     const fill = document.getElementById('progress-fill');
     const body = document.querySelector('.post-body');
     window.addEventListener('scroll', () => {
@@ -812,7 +583,7 @@ Copy
       const progress = Math.min(Math.max(-rect.top / total, 0), 1);
       fill.style.width = (progress * 100) + '%';
     });
- 
+
     const sections = document.querySelectorAll('.post-body h2[id]');
     const tocObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -821,7 +592,7 @@ Copy
       });
     }, { rootMargin: '-30% 0px -60% 0px' });
     sections.forEach(s => tocObserver.observe(s));
- 
+
     const revealEls = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -830,21 +601,6 @@ Copy
     }, { threshold: 0.08 });
     revealEls.forEach(el => observer.observe(el));
   </script>
- 
+
 </body>
 </html>
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
